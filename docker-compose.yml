@@ -1,0 +1,104 @@
+version: '3'
+services:
+  musicuserservice:
+    build: capstone_user_service
+    restart: always
+    container_name: music-musicuser
+    depends_on:
+      - configserver
+      - music-eureka
+      - mongo
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.2
+    ports:
+      - "8083:8083"
+
+  musicauthservice:
+    build: capstone_authentication_service
+    restart: always
+    container_name: music-musicauth
+    depends_on:
+      - configserver
+      - music-eureka
+      - mysql
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.3
+    ports:
+      - "8084:8084"
+
+  configserver:
+    build: capstone_config_server
+    restart: always
+    container_name: music-configserver
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.4
+    ports:
+      - "8090:8090"
+
+  music-eureka:
+    build: capstone_eureka_server
+    restart: always
+    container_name: music-eureka
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.5
+    ports:
+      - "9003:9003"
+
+  orchestration:
+    build: capstone_orchestration_service
+    restart: always
+    container_name: music-orchestration
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.6
+    ports:
+      - "8082:8082"
+
+  mysql:
+    image: mysql:5.7
+    container_name: music-auth_mysql_1
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_DATABASE=capstonedb
+      - MYSQL_ROOT_PASSWORD=root
+
+  mongo:
+    image: mongo:3.4-jessie
+    container_name: music-user_mongo_1
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.8
+    ports:
+      - "27017:27017"
+
+  zuul:
+    build: capstone_zuul_service
+    restart: always
+    container_name: music-zuul
+    depends_on:
+      - musicuserservice
+      - musicauthservice
+      - orchestration
+    networks:
+      testing_net:
+        ipv4_address: 172.29.0.9
+    ports:
+      - "8086:8086"
+
+networks:
+  testing_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.29.0.0/16

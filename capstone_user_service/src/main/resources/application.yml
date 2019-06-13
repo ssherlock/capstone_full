@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  application:
+#    name: musicuserservice
+
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      database: ${MONGO_DB_NAME}
+
+##Excepttion messages
+exception:
+  error_msg: Some Internal Error Occured !! Try After sometime
+  userNotFound_msg: User Not Found
+  invalidPassword_msg: Invalid Password
+  trackAlreadyExists_msg: Track Already Saved For User
+  trackNotFound_msg: Track Not Found For User
+  userAlreadyRegistered_msg: User Already Registered
+  missingData_msg: Some or all data missing
+
+auth:
+  shared:
+    key: secretkey
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#If a server gets in endless loop look here first!
+logging:
+  level:
+    ROOT: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+#  file: app.log
+#  Use file above, otherwise will log to console log (OK for this)
+

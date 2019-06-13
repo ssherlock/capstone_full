@@ -1,0 +1,16 @@
+server:
+  port: 8090
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ssherlock/capstone-configuration.git
+management:
+  security:
+    enabled:false
+  endpoints:
+    web:
+      exposure:
+        include: "*"

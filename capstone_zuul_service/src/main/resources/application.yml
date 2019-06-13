@@ -1,0 +1,32 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: apigateway
+
+zuul:
+  routes:
+    musicorchestrationservice:
+      url: http://orchestration:8082
+    musicuserservice:
+      url: http://musicuserservice:8083
+    musicauthenticationservice:
+      url: http://musicauthservice:8084
+auth:
+  shared:
+    key: secretkey
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#If a server gets in endless loop look here first!
+logging:
+  level:
+    ROOT: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"

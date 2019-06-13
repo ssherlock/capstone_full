@@ -1,0 +1,71 @@
+## Data Source configuration
+
+server:
+  port: 8084
+
+spring:
+  application:
+  #  name: musicauthenticationservice
+  datasource:
+    url: ${MYSQL_URI}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASS}
+
+#    url: ${MYSQL_URL}
+#    username: ${MYSQL_USER}
+#    password: ${MYSQL_PASSWORD}
+
+## Hibernate configuration
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+##Excepttion messages
+exception:
+  error_msg: Some Internal Error Occured !! Try After sometime
+  userNotFound_msg: User Not Found
+  invalidPassword_msg: Invalid Password
+  userAlreadyExists_msg: User Already Exists
+  missingData_msg: Some or all data missing
+
+#Actuator
+# expose all endpoints:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+## Configuring info endpoint
+info:
+  app:
+    name: Music Authentication Service
+    description: Authentication service for the Music Tracks Service
+    version: 1.0.0
+
+
+#If a server gets in endless loop look here first!
+logging:
+  level:
+    ROOT: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+#  file: app.log
+#  Use file above, otherwise will log to console log (OK for this)
+
+auth:
+  shared:
+    key: secretkey
+
+#eureka:
+ # client:
+  #  serviceUrl:
+   #   defaultZone: http://music-eureka:9003/eureka
+    #register-with-eureka: true
+    #fetch-registry: true
